@@ -1,0 +1,34 @@
+---
+- name: check installed embnulk
+  stat: path=/usr/bin/embulk
+  register: fm
+  tags:
+    - embulk
+
+- name: install embulk
+  shell: curl --create-dirs -o /usr/bin/embulk -L "https://dl.embulk.org/embulk-latest.jar"
+  when: not fm.stat.exists
+  tags:
+    - embulk
+
+- name: change premission embulk
+  become: true
+  become_method: sudo
+  shell: chmod +x /usr/bin/embulk
+  when: not fm.stat.exists
+  tags:
+    - embulk
+
+- name: install embulk gem
+  shell: embulk gem install {{ item.name }}
+  with_items:
+      - { name: embulk-filter-column, state: latest }
+      - { name: embulk-filter-query_string, state: latest }
+      - { name: embulk-filter-row, state: latest }
+      - { name: embulk-output-command, state: latest }
+      - { name: embulk-output-mysql, state: latest }
+      - { name: embulk-parser-apache-custom-log, state: latest }
+      - { name: embulk-plugin-filter-grep, state: latest }
+      - { name: embulk-parser-ltsv, state: latest }
+  tags:
+    - embulk

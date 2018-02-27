@@ -1,0 +1,13 @@
+---
+- hosts: localhost
+  connection: local
+  become: yes
+  vars_files:
+    - vars/local.{{ _env }}.yml
+  roles:
+    - common
+    - c
+    - ruby
+    - js
+    - embulk
+    - db

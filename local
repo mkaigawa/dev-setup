@@ -1,0 +1,8 @@
+[all:vars]
+_env = dev
+ansible_ssh_user=vagrant
+git_user=mkaigawa
+git_email=mkaigawa@xxxxx.com
+
+[local]
+127.0.0.1

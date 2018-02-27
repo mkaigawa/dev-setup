@@ -1,0 +1,15 @@
+---
+- name: install yum repo config
+  copy:
+      src=files/yum.repos.d/mariadb.repo
+      dest=/etc/yum.repos.d/mariadb.repo
+  tags:
+    - db
+
+- name: install packages
+  yum: name={{ item.name }} state={{ item.state }}
+  with_items:
+    - { name: MariaDB-server, state: present }
+    - { name: MariaDB-client, state: present }
+  tags:
+    - db
