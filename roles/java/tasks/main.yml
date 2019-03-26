@@ -1,0 +1,39 @@
+---
+- name: common dir
+  file: path={{ item.path }} state=directory owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
+  with_items:
+    - { path: /opt/gradle,  owner: root, group: root, mode: "0755" }
+
+- name: gradle is installed
+  stat:
+    path: /opt/gradle/gradle-5.3
+  register: gradle
+
+- name: Download file with check (sha256)
+  get_url:
+    url: https://services.gradle.org/distributions/gradle-5.3-bin.zip
+    dest: /tmp
+    checksum: sha256:bed2bdd3955be5a09ca7e0201e9d131f194f7f6c466e1795a733733ccfb09f25
+  when: not gradle.stat.exists
+
+- name: unzip gradle
+  unarchive:
+    src: "/tmp/gradle-5.3-bin.zip"
+    dest: "/opt/gradle"
+    remote_src: yes
+  become: yes
+  when: not gradle.stat.exists
+
+- name: copy rundeck file and directory
+  copy:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
+      owner: "{{ item.owner }}"
+      group: "{{ item.group }}"
+      mode: "{{ item.mode }}"
+  with_items:
+    - { src: "profile.d/gradle.sh", dest: /etc/profile.d/gradle.sh, owner: root, group: root, mode: "0644" }
+
+
+
+

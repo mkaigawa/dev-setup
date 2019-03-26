@@ -6,8 +6,9 @@
     - vars/local.{{ _env }}.yml
   roles:
     - common
-    - c
-    - ruby
-    - js
-    - embulk
-    - db
+    # - c
+    # - ruby
+    # - js
+    # - embulk
+    # - db
+    - java
